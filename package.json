@@ -1,0 +1,20 @@
+{
+  "name": "demo-4",
+  "version": "1.0.0",
+  "description": "?city=Mumbai\r ?movie=Pulp+Fiction",
+  "main": "index.js",
+  "scripts": {
+    "start": "docker-compose up --build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reeyouz/demo-4.git"
+  },
+  "keywords": [],
+  "author": "Arijit Chowdhury",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reeyouz/demo-4/issues"
+  },
+  "homepage": "https://github.com/reeyouz/demo-4#readme"
+}
