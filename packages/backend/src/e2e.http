@@ -1,0 +1,32 @@
+POST http://localhost:3000/user/register
+Content-Type: application/json
+
+{
+  "email": "arijit2345@gmail.com",
+  "password": "hakuna@123",
+  "name": "Arijit"
+}
+
+###
+POST http://localhost:3000/user/login
+Content-Type: application/json
+
+{
+  "email": "arijit234@gmail.com",
+  "password": "hakuna@123"
+}
+
+###
+
+GET http://localhost:3000/show
+
+###
+
+POST http://localhost:3000/show/book
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJmNDRmODIzN2Q4ZWZkMzhkMjIwNTUiLCJlbWFpbCI6ImFyaWppdDIzNEBnbWFpbC5jb20iLCJpYXQiOjE2NDcyODM3NjEsImV4cCI6MTY0NzI4NzM2MX0.rQUFnxIc9e7AcRzBu1oKyX-ZblpNLdJ9wTwZRuOz0Lw
+
+{
+  "_id": "622f0458ec00c1b60ef3ec95",
+  "seats": 55
+}

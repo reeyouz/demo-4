@@ -13,17 +13,23 @@ export class UserController extends Controller {
   ) {
     super(loggerService);
     this.path = path;
-    this.router.get("/", this.getUserById.bind(this));
-    this.router.post("/", this.createUser.bind(this));
+    this.router.post("/register", this.register.bind(this));
+    this.router.post("/login", this.login.bind(this));
   }
 
-  async createUser(req: Request, res: Response, next: NextFunction) {
+  async register(req: Request, res: Response, next: NextFunction) {
     const result = await this.userService.createUser(req.body);
     if (result.isLeft()) {
-      return this.http.created();
+      return this.http.created(result.value);
     }
     next(result.value);
   }
 
-  async getUserById(req: Request, res: Response, next: NextFunction) {}
+  async login(req: Request, res: Response, next: NextFunction) {
+    const result = await this.userService.loginUser(req.body);
+    if (result.isLeft()) {
+      return this.http.ok(result.value);
+    }
+    next(result.value);
+  }
 }

@@ -6,6 +6,14 @@ import { NoMoviesInYourCity, QueryCityRequired } from "./show.errors";
 import { Show } from "./show.model";
 import { ShowRepository } from "./show.repository";
 import { Filter } from "mongodb";
+import {
+  BaseShow,
+  InvalidBookShowBody,
+  NoMatchingShows,
+  NotEnoughTickets,
+  ShowBookUpdateError,
+} from ".";
+import { validateSync } from "class-validator";
 
 export class ShowService extends Service {
   constructor(
@@ -35,5 +43,47 @@ export class ShowService extends Service {
       return right(NoMoviesInYourCity.create());
     }
     return left(result);
+  }
+
+  async bookAShow(
+    data: any
+  ): Promise<
+    Either<
+      undefined,
+      | InvalidBookShowBody
+      | NoMatchingShows
+      | NotEnoughTickets
+      | ShowBookUpdateError
+    >
+  > {
+    const showDetails = BaseShow.getInstance(data);
+
+    const errors = validateSync(showDetails, {
+      validationError: { target: false, value: false },
+    });
+    if (errors.length > 0) {
+      const error = InvalidBookShowBody.create();
+      error.errors = errors;
+      return right(error);
+    }
+
+    const result = await this.showRepository.findOne({ _id: showDetails._id });
+    if (result === null) {
+      return right(NoMatchingShows.create(showDetails._id));
+    }
+
+    if (showDetails.seats > result.seats) {
+      return right(NotEnoughTickets.create(result.seats));
+    }
+
+    const updateResult = await this.showRepository.update(
+      { _id: showDetails._id },
+      { $set: { seats: result.seats - showDetails.seats } }
+    );
+    if (updateResult.ok === 0) {
+      return right(ShowBookUpdateError.create());
+    }
+
+    return left(undefined);
   }
 }

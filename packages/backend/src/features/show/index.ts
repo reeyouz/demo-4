@@ -3,3 +3,4 @@ export * from "./show.service";
 export * from "./show.repository";
 export * from "./show.model";
 export * from "./show.errors";
+export * from "./show.type";

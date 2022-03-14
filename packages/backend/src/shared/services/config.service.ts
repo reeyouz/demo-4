@@ -18,6 +18,10 @@ export class ConfigService {
     return process.env.MONGO_DB_URI!;
   }
 
+  get JWT_TOKEN() {
+    return process.env.JWT_TOKEN!;
+  }
+
   get isProd() {
     return this._isProd;
   }

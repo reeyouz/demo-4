@@ -1,4 +1,4 @@
-export interface Show {
+export interface IShow {
   _id: string;
   movie_name: string;
   theatre_name: string;

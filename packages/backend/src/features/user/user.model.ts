@@ -7,17 +7,9 @@ import {
   MinLength,
 } from "class-validator";
 import { plainToInstance } from "class-transformer";
-import { User as IUser } from "./user.type";
+import { IUser } from "./user.type";
 
-export class User implements IUser {
-  @IsMongoId()
-  _id: string;
-
-  @MinLength(3)
-  @MaxLength(65)
-  @IsString()
-  name: string;
-
+export class Credentials implements Pick<IUser, "email" | "password"> {
   @IsEmail()
   email: string;
 
@@ -25,6 +17,20 @@ export class User implements IUser {
   @MaxLength(20)
   @IsString()
   password: string;
+
+  static getInstance(data: any) {
+    return plainToInstance(Credentials, data);
+  }
+}
+
+export class User extends Credentials implements IUser {
+  @IsMongoId()
+  _id: string;
+
+  @MinLength(3)
+  @MaxLength(65)
+  @IsString()
+  name: string;
 
   @IsDate()
   createdOn: Date;

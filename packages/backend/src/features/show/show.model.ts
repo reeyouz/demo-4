@@ -10,12 +10,35 @@ import {
   MinLength,
 } from "class-validator";
 import { ObjectId } from "mongodb";
-import { Show as IShow } from "./show.type";
+import { IShow } from "./show.type";
 
-export class Show implements IShow {
+export class BaseShow implements Pick<IShow, "_id" | "seats"> {
   @IsMongoId()
   _id: string;
 
+  @Min(10)
+  @Max(120)
+  @IsNumber()
+  seats: number;
+
+  constructor(seats = 100) {
+    this._id = new ObjectId().toString();
+    this.seats = seats;
+  }
+
+  getObject(): Pick<IShow, "_id" | "seats"> {
+    return {
+      _id: this._id,
+      seats: this.seats,
+    };
+  }
+
+  static getInstance(data: object) {
+    return plainToInstance(BaseShow, data);
+  }
+}
+
+export class Show extends BaseShow implements IShow {
   @MinLength(1)
   @MaxLength(100)
   @IsString()
@@ -37,11 +60,6 @@ export class Show implements IShow {
   @IsDateString()
   end_time: Date;
 
-  @Min(10)
-  @Max(120)
-  @IsNumber()
-  seats: Number;
-
   constructor(
     movie: string,
     theatre: string,
@@ -50,13 +68,12 @@ export class Show implements IShow {
     end: Date,
     seats = 100
   ) {
+    super(seats);
     this.movie_name = movie;
     this.theatre_name = theatre;
     this.city_name = city;
     this.start_time = start;
     this.end_time = end;
-    this.seats = seats;
-    this._id = new ObjectId().toString();
   }
 
   getObject(): IShow {
@@ -71,7 +88,7 @@ export class Show implements IShow {
     };
   }
 
-  static getInstance(data: any) {
+  static getInstance(data: object) {
     return plainToInstance(Show, data);
   }
 }

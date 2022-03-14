@@ -14,7 +14,12 @@ import {
   UserRepository,
   UserService,
 } from "./features";
-import { DatabaseService, configService, loggerService } from "./shared";
+import {
+  DatabaseService,
+  configService,
+  loggerService,
+  middlewareService,
+} from "./shared";
 
 export function bootstrap(
   databaseService: DatabaseService,
@@ -30,7 +35,11 @@ export function bootstrap(
   const userResult = databaseService.getCollection<User>(databaseName, "users");
   if (userResult.isLeft()) {
     const userRepository = new UserRepository(loggerService, userResult.value);
-    const userService = new UserService(loggerService, userRepository);
+    const userService = new UserService(
+      loggerService,
+      userRepository,
+      configService
+    );
     controllers.push(new UserController(userService, loggerService));
   }
 
@@ -39,7 +48,9 @@ export function bootstrap(
   if (showResult.isLeft()) {
     const showRepository = new ShowRepository(loggerService, showResult.value);
     const showService = new ShowService(loggerService, showRepository);
-    controllers.push(new ShowController(showService, loggerService));
+    controllers.push(
+      new ShowController(showService, loggerService, middlewareService)
+    );
   }
 
   const app = new Application(configService, loggerService, controllers);

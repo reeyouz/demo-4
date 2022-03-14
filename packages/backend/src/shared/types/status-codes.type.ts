@@ -1,5 +1,6 @@
 import {
   BAD_REQUEST,
+  CONFLICT,
   CREATED,
   FORBIDDEN,
   INTERNAL_SERVER_ERROR,
@@ -15,4 +16,5 @@ export type StatusCodes =
   | typeof UNAUTHORIZED
   | typeof FORBIDDEN
   | typeof NOT_FOUND
+  | typeof CONFLICT
   | typeof INTERNAL_SERVER_ERROR;

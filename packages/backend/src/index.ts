@@ -1,8 +1,7 @@
 import "./script";
 import { bootstrap } from "./bootstrap";
 import { DatabaseService, configService, loggerService } from "./shared";
-import { Show as IShow } from "@features/show/show.type";
-import { Show } from "@features/show";
+import { Show, IShow } from "@features/show";
 
 (async () => {
   const databaseService = new DatabaseService(loggerService, configService);
